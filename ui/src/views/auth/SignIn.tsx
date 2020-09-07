@@ -45,28 +45,28 @@ const SignIn: React.FC = () => {
   let routerHistory = useHistory()
   const { enqueueSnackbar } = useSnackbar()
   const redirectMilliseconds = 500
-  
+
   const onSubmitClick = async (values: any, { setSubmitting }: any) => {
-      try {
-        await authBackend.post('auth/signIn', {
-          email: values.email,
-          password: values.password
-        })
-        setSubmitting(false)
-        routerHistory.push('/')
-      } catch (err) {
-        setSubmitting(false)
-        enqueueSnackbar(err.message ?? err, {
-          variant: 'error',
-          autoHideDuration: redirectMilliseconds
-        })
-        if (err.code === 'UserNotFoundException') {
-          // The error happens when the supplied username/email does not exist in the Cognito user pool
-          setTimeout(() => {
-            routerHistory.push('/auth/register')
-          }, redirectMilliseconds)
-        }
+    try {
+      await authBackend.post('auth/signIn', {
+        email: values.email,
+        password: values.password
+      })
+      setSubmitting(false)
+      routerHistory.push('/')
+    } catch (err) {
+      setSubmitting(false)
+      enqueueSnackbar(err.message ?? err, {
+        variant: 'error',
+        autoHideDuration: redirectMilliseconds
+      })
+      if (err.code === 'UserNotFoundException') {
+        // The error happens when the supplied username/email does not exist in the Cognito user pool
+        setTimeout(() => {
+          routerHistory.push('/auth/register')
+        }, redirectMilliseconds)
       }
+    }
   }
   return (
     <React.Fragment>

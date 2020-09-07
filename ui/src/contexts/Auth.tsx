@@ -32,7 +32,10 @@ export const AuthBrokerContext = React.createContext<AuthBrokerContextType>({
 })
 
 export default ({ children }: any) => {
-  const [authBroker, setAuthBroker] = useState<AuthBrokerContextDataType | null>(null)
+  const [
+    authBroker,
+    setAuthBroker
+  ] = useState<AuthBrokerContextDataType | null>(null)
   const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
@@ -56,9 +59,7 @@ export default ({ children }: any) => {
       })
     }
 
-    const setAuthenticatedUser = (
-      broker: AuthBrokerType
-    ) => {
+    const setAuthenticatedUser = (broker: AuthBrokerType) => {
       setAuthBroker({
         ...broker,
         contextMeta: {
@@ -111,9 +112,7 @@ export default ({ children }: any) => {
   }, [enqueueSnackbar])
 
   return (
-    <AuthBrokerContext.Provider
-      value={{ authBroker, setAuthBroker }}
-    >
+    <AuthBrokerContext.Provider value={{ authBroker, setAuthBroker }}>
       {children}
     </AuthBrokerContext.Provider>
   )

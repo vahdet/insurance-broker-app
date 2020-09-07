@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import {
-  AppBar, Toolbar, Typography, Button, Chip, Avatar
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Chip,
+  Avatar
 } from '@material-ui/core'
 import {
   createStyles,
@@ -74,8 +79,15 @@ const TheHeader: React.FC = () => {
           {!!isBrokerAuthenticated ? (
             isBrokerAuthenticated ? (
               <React.Fragment>
-                <Chip avatar={<Avatar/>} label={`${authBroker?.firstName} ${authBroker?.lastName}`}/>
-                <Button color="inherit" component={RouterLink} to="/auth/signUp">
+                <Chip
+                  avatar={<Avatar />}
+                  label={`${authBroker?.firstName} ${authBroker?.lastName}`}
+                />
+                <Button
+                  color="inherit"
+                  component={RouterLink}
+                  to="/auth/signUp"
+                >
                   Sign Out
                 </Button>
               </React.Fragment>

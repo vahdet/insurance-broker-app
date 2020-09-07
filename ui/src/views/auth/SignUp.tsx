@@ -5,7 +5,13 @@ import TextField from 'components/common/wrappers/TheHelpedFormikTextField'
 import * as Yup from 'yup'
 import { useSnackbar } from 'notistack'
 import { passwordRegex, emailRegex } from 'utils/constants'
-import { Box, Typography, Grid, Button, CircularProgress } from '@material-ui/core'
+import {
+  Box,
+  Typography,
+  Grid,
+  Button,
+  CircularProgress
+} from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { authBackend } from 'httpCall'
 
@@ -47,7 +53,6 @@ const SignUp: React.FC = () => {
 
   const onSubmitClick = async (values: any, { setSubmitting }: any) => {
     try {
-
       await authBackend.post('auth/signUp', {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -104,11 +109,7 @@ const SignUp: React.FC = () => {
                 ></Field>
               </Grid>
             </Grid>
-            <Field
-              component={TextField}
-              name="email"
-              label="Email"
-            ></Field>
+            <Field component={TextField} name="email" label="Email"></Field>
             <Field
               component={TextField}
               type="password"
@@ -132,11 +133,7 @@ const SignUp: React.FC = () => {
                   disabled={isSubmitting}
                   onClick={submitForm}
                 >
-                  {!isSubmitting ? (
-                    'Submit'
-                  ) : (
-                    <CircularProgress size={14} />
-                  )}
+                  {!isSubmitting ? 'Submit' : <CircularProgress size={14} />}
                 </Button>
               </Grid>
             </Grid>
