@@ -149,3 +149,7 @@ def get_token() -> str:
             config.SECRET_KEY, expires_in=config.TOKEN_EXPIRATION)
         return ser.dumps({'id': result_id})
     return None, 404
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=6001)

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSnackbar } from 'notistack'
+import { authBackend } from 'httpCall'
 
 export interface AuthBrokerType {
   id: number
@@ -71,42 +72,11 @@ export default ({ children }: any) => {
     // Main body
     ;(async () => {
       try {
-        let [authUser, cognitoCredentials] = await Promise.all([
-          Auth.currentAuthenticatedUser(),
-          Auth.currentCredentials()
-        ])
-        if (!authUser) {
-          setNoUserButReady()
-          return
-        }
-
-        // Extract Cognito Group from token
-        const cognitoGroups = authUser.signInUserSession.accessToken.payload[
-          'cognito:groups'
-        ] as Array<string>
-        // DB data
-        const userGraphqlResponse = (await API.graphql(
-          graphqlOperation(GetUser, { username: authUser.username })
-        )) as {
-          data: GetUserByUsernameQuery
-        }
-
-        let user = userGraphqlResponse.data.getUserByUsername
-        // console.log('User: ' + JSON.stringify(user))
-        if (!user) {
-          setNoUserButReady()
-          throw new Error('no db record found for the authenticated user')
-        }
-
-        setAuthenticatedUser(user, cognitoGroups, profilePictureObjectUrl)
+        // Check if the broker is already logged in
+        let broker
+        setAuthBroker(broker)
       } catch (err) {
         setNoUserButReady()
-
-        if (![cognitoNotAuthenticatedMessage].includes(err.toString())) {
-          enqueueSnackbar(JSON.stringify(err), {
-            variant: 'error'
-          })
-        }
       }
     })()
   }, [enqueueSnackbar])

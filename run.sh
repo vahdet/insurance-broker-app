@@ -1,11 +1,11 @@
 #!/bin/bash
 (
     cd api/auth
-    flask run
+    python3 app.py
 ) &
 (
     cd api/app
-    flask run
+    python3 app.py
 ) &
 (
     cd ui
