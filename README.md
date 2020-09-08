@@ -85,7 +85,7 @@ On the workstation the following should be installed:
 
 ## Running the Application
 
-Running the scripts below from the repo root should run:
+Again **ensuring current working directory is the root folder of the repository**, running the scripts below should run:
 
 - Auth backend service
 
@@ -184,9 +184,9 @@ I had three options when planning my authentication flow:
 
 3. **A less sophisticated token**: Wanting the separate concerns lie on different projects and thinking, at this level, JWT is too much; I decided using a dumber token logic as shown _Token Based Authentication_ section of Miguel Grinberg's blogpost [here](https://blog.miguelgrinberg.com/post/restful-authentication-with-flask).
 
-## Code Base Privacy
+## Code Base Privacy (Visibilty made public, no more valid)
 
-Even if this repository is a private one and not available for disttribution. In order to further guarantee the confidentiality, the owner states that no license is included intentionally so that it has [no public permission](https://choosealicense.com/no-permission/).
+Even if this repository is a private one and not available for distribution. In order to further guarantee the confidentiality, the owner states that no license is included intentionally so that it has [no public permission](https://choosealicense.com/no-permission/).
 
 ## References
 
