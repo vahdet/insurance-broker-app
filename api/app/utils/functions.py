@@ -52,8 +52,6 @@ def calculate_agency(broker_address: str, agencies: List[dict]) -> str:
     broker_geocoding_results = asyncio.run(dispatch(brokers)) or []
     broker_geocoding_result = next(iter(broker_geocoding_results), None)
 
-    print('broker' + str(closest_agency.get('id', None)))
-
     for agency in agencies_geocoding_results:
         broker_pos = (broker_geocoding_result.get('position').get(
             'lat'), broker_geocoding_result.get('position').get('lng'))
@@ -68,5 +66,4 @@ def calculate_agency(broker_address: str, agencies: List[dict]) -> str:
         agencies_geocoding_results,
         key=lambda a: a.get('distance')
     )
-    print('closest' + str(closest_agency))
     return closest_agency.get('id', None)

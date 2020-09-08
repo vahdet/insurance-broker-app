@@ -47,7 +47,6 @@ const SignUpBroker: React.FC = () => {
 
   const onSubmitClick = async (values: any, { setSubmitting }: any) => {
     try {
-      console.log(values.firstName)
       await appBackend.post(
         'api/users',
         {
