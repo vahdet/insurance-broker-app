@@ -1,2 +1,8 @@
 # SQLite DB
 COALITION.db
+
+# IDE
+.vscode/
+
+# Cache
+.pytest_cache/

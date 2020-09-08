@@ -1,11 +1,11 @@
-import React from 'react'
-import { Link as RouterLink, useHistory } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import { Formik, Form, Field } from 'formik'
 import TextField from 'components/common/wrappers/TheHelpedFormikTextField'
 import * as Yup from 'yup'
 import { useSnackbar } from 'notistack'
-import { passwordRegex, emailRegex } from 'utils/constants'
+import { emailRegex } from 'utils/constants'
 import {
   Box,
   Typography,
@@ -14,6 +14,7 @@ import {
   CircularProgress
 } from '@material-ui/core'
 import { authBackend } from 'httpCall'
+import { AuthBrokerContext } from 'contexts/Auth'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,24 +36,28 @@ const formValidationSchema = () =>
     email: Yup.string()
       .matches(emailRegex, 'Invalid email address')
       .required('Email required'),
-    password: Yup.string()
-      .matches(passwordRegex, 'Password weak')
-      .required('Password required')
+    password: Yup.string().required('Password required')
   })
 
 const SignIn: React.FC = () => {
   const classes = useStyles()
   let routerHistory = useHistory()
+  const { dispatch } = useContext(AuthBrokerContext)
   const { enqueueSnackbar } = useSnackbar()
   const redirectMilliseconds = 500
 
   const onSubmitClick = async (values: any, { setSubmitting }: any) => {
     try {
-      await authBackend.post('auth/signIn', {
+      const { data } = await authBackend.post('token', {
         email: values.email,
         password: values.password
       })
+      dispatch({
+        type: 'SIGNIN',
+        payload: { data }
+      })
       setSubmitting(false)
+
       routerHistory.push('/')
     } catch (err) {
       setSubmitting(false)
@@ -60,12 +65,6 @@ const SignIn: React.FC = () => {
         variant: 'error',
         autoHideDuration: redirectMilliseconds
       })
-      if (err.code === 'UserNotFoundException') {
-        // The error happens when the supplied username/email does not exist in the Cognito user pool
-        setTimeout(() => {
-          routerHistory.push('/auth/register')
-        }, redirectMilliseconds)
-      }
     }
   }
   return (
@@ -93,7 +92,7 @@ const SignIn: React.FC = () => {
               label="Password"
             />
 
-            <Grid container spacing={10} justify="space-between">
+            <Grid container spacing={1}>
               <Grid item xs={12} md={6}>
                 <Button
                   fullWidth
@@ -104,17 +103,6 @@ const SignIn: React.FC = () => {
                   onClick={submitForm}
                 >
                   {!isSubmitting ? 'Submit' : <CircularProgress size={14} />}
-                </Button>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Button
-                  fullWidth
-                  disableElevation
-                  color="inherit"
-                  component={RouterLink}
-                  to="/auth/signUp"
-                >
-                  Sign Up
                 </Button>
               </Grid>
             </Grid>

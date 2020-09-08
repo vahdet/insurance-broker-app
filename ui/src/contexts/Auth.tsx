@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { useSnackbar } from 'notistack'
-import { authBackend } from 'httpCall'
+import React, { useReducer, createContext } from 'react'
 
 export interface AuthBrokerType {
   id: number
@@ -9,80 +7,65 @@ export interface AuthBrokerType {
   email: string
   address: string
   agency: {
-    id: number
     title: string
     domain: string
-    address: string
   }
 }
 
-interface AuthBrokerContextDataType extends AuthBrokerType {
-  contextMeta: {
-    isReady: boolean
-  }
+interface AuthBrokerContextDataType {
+  isAuthenticated: boolean
+  token: string
 }
 
 export interface AuthBrokerContextType {
-  authBroker: AuthBrokerContextDataType | null
-  setAuthBroker: Function
+  state: AuthBrokerContextDataType | null
+  dispatch: Function
 }
 
-export const AuthBrokerContext = React.createContext<AuthBrokerContextType>({
-  authBroker: null,
-  setAuthBroker: () => {}
+export const AuthBrokerContext = createContext<AuthBrokerContextType>({
+  state: null,
+  dispatch: () => {}
 })
 
-export default ({ children }: any) => {
-  const [
-    authBroker,
-    setAuthBroker
-  ] = useState<AuthBrokerContextDataType | null>(null)
-  const { enqueueSnackbar } = useSnackbar()
+const initialState: AuthBrokerContextDataType = {
+  isAuthenticated: false,
+  token: ''
+}
 
-  useEffect(() => {
-    // Closure
-    const setNoUserButReady = () => {
-      setAuthBroker({
-        id: 0,
-        firstName: '',
-        lastName: '',
-        email: '',
-        address: '',
-        agency: {
-          id: 0,
-          title: '',
-          domain: '',
-          address: ''
-        },
-        contextMeta: {
-          isReady: true
-        }
-      })
-    }
+type AuthBrokerActionType = {
+  type: 'SIGNIN' | 'SIGNOUT'
+  payload: {
+    token: string
+  }
+}
 
-    const setAuthenticatedUser = (broker: AuthBrokerType) => {
-      setAuthBroker({
-        ...broker,
-        contextMeta: {
-          isReady: true
-        }
-      })
-    }
-
-    // Main body
-    ;(async () => {
-      try {
-        // Check if the broker is already logged in
-        let broker
-        setAuthBroker(broker)
-      } catch (err) {
-        setNoUserButReady()
+const reducer = (
+  state: AuthBrokerContextDataType,
+  action: AuthBrokerActionType
+): AuthBrokerContextDataType => {
+  switch (action.type) {
+    case 'SIGNIN':
+      localStorage.setItem('token', JSON.stringify(action.payload.token))
+      return {
+        ...state,
+        isAuthenticated: true,
+        token: action.payload.token
       }
-    })()
-  }, [enqueueSnackbar])
+    case 'SIGNOUT':
+      localStorage.clear()
+      return {
+        ...state,
+        isAuthenticated: false
+      }
+    default:
+      return state
+  }
+}
 
+export default ({ children }: any) => {
+  const [state, dispatch] = useReducer(reducer, initialState)
   return (
-    <AuthBrokerContext.Provider value={{ authBroker, setAuthBroker }}>
+    <AuthBrokerContext.Provider value={{ state, dispatch }}>
       {children}
     </AuthBrokerContext.Provider>
   )

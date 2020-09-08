@@ -1,23 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Chip,
-  Avatar
-} from '@material-ui/core'
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  useTheme
-} from '@material-ui/core/styles'
-
+import { AppBar, Toolbar, Typography, Button, Avatar } from '@material-ui/core'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { AuthBrokerContext } from 'contexts/Auth'
-import { useSnackbar } from 'notistack'
-import { Skeleton } from '@material-ui/lab'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,7 +13,8 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1
     },
     title: {
-      flexGrow: 1
+      flexGrow: 1,
+      color: '#FFFFFF'
     },
     grow: {
       flexGrow: 1
@@ -38,33 +24,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const TheHeader: React.FC = () => {
   const classes = useStyles()
-  const [isBrokerAuthenticated, setIsBrokerAuthenticated] = useState<
-    boolean | undefined
-  >(undefined)
-  const { authBroker, setAuthBroker } = useContext(AuthBrokerContext)
-  const { enqueueSnackbar } = useSnackbar()
-
-  // Side Effects: Is admin
-  useEffect(() => {
-    try {
-      if (!authBroker || !authBroker.contextMeta.isReady) {
-        setIsBrokerAuthenticated(undefined)
-      } else {
-        setIsBrokerAuthenticated(!!authBroker?.id)
-      }
-    } catch (err) {
-      enqueueSnackbar(JSON.stringify(err), {
-        variant: 'error'
-      })
-    }
-  }, [authBroker, enqueueSnackbar])
+  const { state: authState, dispatch } = useContext(AuthBrokerContext)
 
   return (
     <header className={classes.header}>
       <AppBar
         position="static"
         className={classes.appBar}
-        color="transparent"
+        color="primary"
         elevation={0}
       >
         <Toolbar>
@@ -76,41 +43,25 @@ const TheHeader: React.FC = () => {
           </RouterLink>
           <div className={classes.grow} />
           {/* Top Bar Buttons */}
-          {!!isBrokerAuthenticated ? (
-            isBrokerAuthenticated ? (
-              <React.Fragment>
-                <Chip
-                  avatar={<Avatar />}
-                  label={`${authBroker?.firstName} ${authBroker?.lastName}`}
-                />
-                <Button
-                  color="inherit"
-                  component={RouterLink}
-                  to="/auth/signUp"
-                >
-                  Sign Out
-                </Button>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                <Button
-                  color="inherit"
-                  component={RouterLink}
-                  to="/auth/signIn"
-                >
-                  Sign In
-                </Button>
-                <Button
-                  color="inherit"
-                  component={RouterLink}
-                  to="/auth/signUp"
-                >
-                  Sign Up
-                </Button>
-              </React.Fragment>
-            )
+          {authState?.isAuthenticated ? (
+            <React.Fragment>
+              <Avatar />
+              <Button
+                color="inherit"
+                onClick={() => dispatch({ type: 'SIGNOUT' })}
+              >
+                Sign Out
+              </Button>
+            </React.Fragment>
           ) : (
-            <Skeleton />
+            <React.Fragment>
+              <Button color="inherit" component={RouterLink} to="/auth/signIn">
+                Sign In
+              </Button>
+              <Button color="inherit" component={RouterLink} to="/auth/signUp">
+                Sign Up
+              </Button>
+            </React.Fragment>
           )}
         </Toolbar>
       </AppBar>

@@ -7,7 +7,7 @@ import { Skeleton } from '@material-ui/lab'
 import { SnackbarProvider } from 'notistack'
 
 import BrokersHubHeader from 'components/common/TheHeader'
-import AuthBrokerContextProvider, { AuthBrokerContext } from 'contexts/Auth'
+import AuthBrokerContextProvider from 'contexts/Auth'
 import router from 'router'
 
 const App: React.FC = () => {

@@ -1,11 +1,11 @@
 #!/bin/bash
 (
-    cd api/auth
-    python3 app.py
+    source "api/auth/venv/bin/activate"
+    python app.py
 ) &
 (
-    cd api/app
-    python3 app.py
+    source "api/app/venv/bin/activate"
+    python app.py
 ) &
 (
     cd ui

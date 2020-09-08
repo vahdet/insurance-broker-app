@@ -4,7 +4,7 @@ import { Formik, Form, Field } from 'formik'
 import TextField from 'components/common/wrappers/TheHelpedFormikTextField'
 import * as Yup from 'yup'
 import { useSnackbar } from 'notistack'
-import { passwordRegex, emailRegex } from 'utils/constants'
+import { emailRegex } from 'utils/constants'
 import {
   Box,
   Typography,
@@ -13,7 +13,7 @@ import {
   CircularProgress
 } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
-import { authBackend } from 'httpCall'
+import { appBackend } from 'httpCall'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,13 +37,7 @@ const formValidationSchema = () =>
     address: Yup.string(),
     email: Yup.string()
       .matches(emailRegex, 'Invalid email address')
-      .required('Email required'),
-    password: Yup.string()
-      .matches(passwordRegex, 'Password weak')
-      .required('Password required'),
-    retypePassword: Yup.string()
-      .oneOf([Yup.ref('password'), ''], 'Passwords do not match')
-      .required('Retype password requried')
+      .required('Email required')
   })
 
 const SignUp: React.FC = () => {
@@ -53,13 +47,16 @@ const SignUp: React.FC = () => {
 
   const onSubmitClick = async (values: any, { setSubmitting }: any) => {
     try {
-      await authBackend.post('auth/signUp', {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        address: values.address,
-        email: values.email,
-        password: values.password
-      })
+      await appBackend.post(
+        'api/user',
+        {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+          address: values.address
+        },
+        { withCredentials: true }
+      )
 
       // Push to sign in page
       routerHistory.push('/auth/signIn')
@@ -84,9 +81,7 @@ const SignUp: React.FC = () => {
           firstName: '',
           lastName: '',
           email: '',
-          address: '',
-          password: '',
-          retypePassword: ''
+          address: ''
         }}
         validationSchema={formValidationSchema}
         onSubmit={onSubmitClick}
@@ -112,16 +107,11 @@ const SignUp: React.FC = () => {
             <Field component={TextField} name="email" label="Email"></Field>
             <Field
               component={TextField}
-              type="password"
-              name="password"
-              label="Password"
-            />
-            <Field
-              component={TextField}
-              type="password"
-              name="retypePassword"
-              label="Retype Password"
-            />
+              name="address"
+              label="Address"
+              multiline
+              rows={3}
+            ></Field>
 
             <Grid container spacing={1}>
               <Grid item xs={12} md={6}>

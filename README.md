@@ -8,9 +8,9 @@ On the workstation the following should be installed:
 
 - [SQLite 3](https://www.sqlite.org/download.html)
 
-- [Python 3.7 +](https://www.python.org/downloads/)
+- [Python 3.7+](https://www.python.org/downloads/)
 
-- [Node 10 +](https://nodejs.org/en/)
+- [Node 6+](https://nodejs.org/en/)
 
 - And, clone this repository: `git clone https://github.com/vahdet/insurance-broker-app.git` 🍾
 
@@ -78,11 +78,74 @@ On the workstation the following should be installed:
    sqlite> .quit
    ```
 
-## Running the application
+## Running the Application
 
-### Install the dependencies
+Running the scripts below from the repo root should run:
 
-- Create a virtual environment named _venv_ in the authenticaation project (backend) and install the dependencies:
+- Auth backend service
+
+- App backend service
+
+- Frontend
+
+and then you can start using from your browser on default React endpoint: `http://localhost:3000`
+
+### Windows
+
+- Terminal #1:
+
+    ```bat
+    $ cd .\api\auth
+    $ .\venv\Scripts\activate
+    $ (venv) python app.py
+    ```
+
+- Terminal #2:
+
+    ```bat
+    $ cd .\api\app
+    $ .\venv\Scripts\activate
+    $ (venv) python app.py
+    ```
+
+- Terminal #3:
+
+    ```bat
+    $ cd .\ui
+    $ npm start
+    ```
+
+### Linux/macOS
+
+Running the script `. run.sh` should launch three subshells and run all the apps in parallel. However, in case there occurs problems with it; manual scripts can be run as follows:
+
+- Terminal #1:
+
+    ```sh
+    $ cd api/auth
+    $ venv/bin/activate
+    $ (venv) python app.py
+    ```
+
+- Terminal #2:
+
+    ```sh
+    $ cd api/app
+    $ venv/Scripts/activate
+    $ (venv) python app.py
+    ```
+
+- Terminal #3:
+
+    ```sh
+    $ cd ui
+    $ npm start
+    ```
+
+
+### Preparing the Environment and Installing the Dependencies
+
+- Create a virtual environment named _venv_ in the authentication project (backend) and install the dependencies:
 
   - Windows:
 
@@ -111,36 +174,47 @@ On the workstation the following should be installed:
   - Windows:
 
     ```ps1
-    cd api\app
-    py -3 -m venv venv
-    venv\Scripts\activate
-    (venv) $ pip install -r requirements.txt
-    (venv) $ deactivate
-    cd ..\..
+    $ cd api\app
+    $ py -3 -m venv venv
+    $ venv\Scripts\activate
+    $ (venv) $ pip install -r requirements.txt
+    $ (venv) $ deactivate
+    $ cd ..\..
     ```
 
   - Linux/macOS:
 
     ```sh
-    cd api/app
-    python3 -m venv venv
-    source venv/bin/activate
-    (venv) $ pip install -r requirements.txt
-    (venv) $ deactivate
-    cd ../..
+    $ cd api/app
+    $ python3 -m venv venv
+    $ source venv/bin/activate
+    $ (venv) $ pip install -r requirements.txt
+    $ (venv) $ deactivate
+    $ cd ../..
     ```
 
 - Install `node_modules` for the frontend:
 
   ```sh
-  cd ui
-  npm i
-  cd ..
+  $ cd ui
+  $ npm install
   ```
 
-### Locally running the apps
+### Running the Apps
 
-TBD
+Run
+
+- Windows (PowerShell)
+
+    ```ps1
+    . run.sh
+    ```
+
+- Linux
+
+    ```sh
+    . run.sh
+    ```
 
 ## Discussion
 
