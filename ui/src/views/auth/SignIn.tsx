@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link as RouterLink } from 'react-router-dom'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import { Formik, Form, Field } from 'formik'
 import TextField from 'components/common/wrappers/TheHelpedFormikTextField'
@@ -48,7 +48,7 @@ const SignIn: React.FC = () => {
 
   const onSubmitClick = async (values: any, { setSubmitting }: any) => {
     try {
-      const { data } = await authBackend.post('token', {
+      const { data } = await authBackend.post('tokens', {
         email: values.email,
         password: values.password
       })
@@ -67,7 +67,7 @@ const SignIn: React.FC = () => {
       })
     }
   }
-  return (
+  return process.env.REACT_APP_AUTHENTICATION_ENABLED ? (
     <React.Fragment>
       <Box mb={2} pl={1}>
         <Typography variant="h4" color="textSecondary">
@@ -109,6 +109,15 @@ const SignIn: React.FC = () => {
           </Form>
         )}
       </Formik>
+    </React.Fragment>
+  ) : (
+    <React.Fragment>
+      <Typography variant="h4" color="textSecondary">
+        Sign In Logic not implemented yet
+      </Typography>
+      <Button variant="contained" color="primary" component={RouterLink} to="/">
+        Home Page
+      </Button>
     </React.Fragment>
   )
 }

@@ -2,15 +2,19 @@
 
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
+from flask_cors import CORS
 from itsdangerous import TimedJSONWebSignatureSerializer
 import utils.functions as f
 import config
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
+
 
 class AuthTokenApi(Resource):
     """ Api for Auth Tokens """
+
     def __init__(self):
         self.auth_parser = reqparse.RequestParser()
         self.auth_parser.add_argument('username', required=True)
@@ -33,6 +37,7 @@ class AuthTokenApi(Resource):
             return {}, 404
         except Exception as err:
             return f'Exception: {str(err)}', 500
+
 
 api.add_resource(AuthTokenApi, '/tokens')
 

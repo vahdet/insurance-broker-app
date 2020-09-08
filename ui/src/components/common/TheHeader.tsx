@@ -43,23 +43,70 @@ const TheHeader: React.FC = () => {
           </RouterLink>
           <div className={classes.grow} />
           {/* Top Bar Buttons */}
-          {authState?.isAuthenticated ? (
-            <React.Fragment>
-              <Avatar />
-              <Button
-                color="inherit"
-                onClick={() => dispatch({ type: 'SIGNOUT' })}
-              >
-                Sign Out
-              </Button>
-            </React.Fragment>
+          {process.env.REACT_APP_AUTHENTICATION_ENABLED ? (
+            authState?.isAuthenticated ? (
+              <React.Fragment>
+                <Avatar />
+                <Button
+                  color="inherit"
+                  variant="outlined"
+                  component={RouterLink}
+                  to="/"
+                >
+                  Home
+                </Button>
+                <Button
+                  color="inherit"
+                  variant="outlined"
+                  onClick={() => dispatch({ type: 'SIGNOUT' })}
+                >
+                  Sign Out
+                </Button>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Button
+                  color="inherit"
+                  variant="outlined"
+                  component={RouterLink}
+                  to="/"
+                >
+                  Home
+                </Button>
+                <Button
+                  color="inherit"
+                  component={RouterLink}
+                  to="/auth/signIn"
+                >
+                  Sign In
+                </Button>
+                <Button
+                  color="inherit"
+                  variant="outlined"
+                  component={RouterLink}
+                  to="/new"
+                >
+                  Add New Broker
+                </Button>
+              </React.Fragment>
+            )
           ) : (
             <React.Fragment>
-              <Button color="inherit" component={RouterLink} to="/auth/signIn">
-                Sign In
+              <Button
+                color="inherit"
+                variant="outlined"
+                component={RouterLink}
+                to="/"
+              >
+                Home
               </Button>
-              <Button color="inherit" component={RouterLink} to="/auth/signUp">
-                Sign Up
+              <Button
+                color="inherit"
+                variant="outlined"
+                component={RouterLink}
+                to="/new"
+              >
+                Add New Broker
               </Button>
             </React.Fragment>
           )}

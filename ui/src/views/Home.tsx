@@ -18,12 +18,12 @@ interface BrokerRow {
 const tableColumns: Array<Column<BrokerRow>> = [
   {
     title: 'Agency Name',
-    field: 'agencyTitle',
+    field: 'agency.title',
     filtering: false
   },
   {
     title: 'Agency Domain',
-    field: 'agencyDomain',
+    field: 'agency.domain',
     filtering: false
   },
   {
@@ -56,14 +56,14 @@ const Home: React.FC = () => {
   const fetchTableData = () => {
     const asyncFetchBrokers = async () => {
       try {
-        const { data } = await appBackend.get('api/user', {
-          withCredentials: true
+        const { data } = await appBackend.get('api/users', {
+          withCredentials: !!process.env.REACT_APP_AUTHENTICATION_ENABLED
         })
 
         return {
           data: data,
           page: 0,
-          totalCount: 0
+          totalCount: data?.length
         } as QueryResult<BrokerRow>
       } catch (err) {
         enqueueSnackbar(JSON.stringify(err), {
@@ -75,7 +75,8 @@ const Home: React.FC = () => {
     return asyncFetchBrokers()
   }
 
-  return authState?.isAuthenticated ? (
+  return !process.env.REACT_APP_AUTHENTICATION_ENABLED ||
+    authState?.isAuthenticated ? (
     <React.Fragment>
       <Box mb={2} pl={1}>
         <Typography variant="h4" color="textSecondary">
@@ -87,8 +88,9 @@ const Home: React.FC = () => {
         columns={tableColumns}
         data={fetchTableData}
         options={{
-          sorting: true,
-          filtering: true
+          sorting: false,
+          filtering: false,
+          search: false
         }}
       ></MaterialTable>
     </React.Fragment>

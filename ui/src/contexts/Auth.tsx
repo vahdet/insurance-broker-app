@@ -1,23 +1,11 @@
 import React, { useReducer, createContext } from 'react'
 
-export interface AuthBrokerType {
-  id: number
-  firstName: string
-  lastName: string
-  email: string
-  address: string
-  agency: {
-    title: string
-    domain: string
-  }
-}
-
 interface AuthBrokerContextDataType {
   isAuthenticated: boolean
   token: string
 }
 
-export interface AuthBrokerContextType {
+interface AuthBrokerContextType {
   state: AuthBrokerContextDataType | null
   dispatch: Function
 }
@@ -43,9 +31,10 @@ const reducer = (
   state: AuthBrokerContextDataType,
   action: AuthBrokerActionType
 ): AuthBrokerContextDataType => {
+  if (!process.env.REACT_APP_AUTHENTICATION_ENABLED) return state
   switch (action.type) {
     case 'SIGNIN':
-      localStorage.setItem('token', JSON.stringify(action.payload.token))
+      // The Auth API should have pushed token now
       return {
         ...state,
         isAuthenticated: true,

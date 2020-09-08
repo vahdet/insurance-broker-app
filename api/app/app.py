@@ -1,14 +1,18 @@
 """ Application entrypoint """
 
 import sqlite3
+# import asyncio
 from flask import Flask, g
+from flask_cors import CORS
 from flask_restful import Resource, Api, reqparse
 import utils.functions as f
 
 DATABASE = '../../COALITION.db'
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
+
 
 def get_db():
     """ Get DB Connection """
@@ -17,12 +21,14 @@ def get_db():
         db = g._database = sqlite3.connect(DATABASE)
     return db
 
+
 @app.teardown_appcontext
 def close_connection(_exception):
     """ Close DB Connection """
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
+
 
 class UserApi(Resource):
     """ Api for User """
@@ -84,7 +90,6 @@ class UserApi(Resource):
             # Get matching agencies
             conn = get_db()
             cur = conn.cursor()
-            print('HERE')
             cur.execute('''
                 SELECT
                     a.id,
@@ -120,6 +125,7 @@ class UserApi(Resource):
             return f'DB Exception: {str(sql_err)}', 500
         except Exception as err:
             return f'Exception: {str(err)}', 500
+
 
 api.add_resource(UserApi, '/api/users')
 

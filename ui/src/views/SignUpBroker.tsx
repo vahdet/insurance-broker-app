@@ -34,32 +34,37 @@ const formValidationSchema = () =>
   Yup.object().shape({
     firstName: Yup.string().required('First name required'),
     lastName: Yup.string().required('Last name required'),
-    address: Yup.string(),
+    address: Yup.string().required('Address required'),
     email: Yup.string()
       .matches(emailRegex, 'Invalid email address')
       .required('Email required')
   })
 
-const SignUp: React.FC = () => {
+const SignUpBroker: React.FC = () => {
   const classes = useStyles()
   let routerHistory = useHistory()
   const { enqueueSnackbar } = useSnackbar()
 
   const onSubmitClick = async (values: any, { setSubmitting }: any) => {
     try {
+      console.log(values.firstName)
       await appBackend.post(
-        'api/user',
+        'api/users',
         {
           firstName: values.firstName,
           lastName: values.lastName,
           email: values.email,
           address: values.address
         },
-        { withCredentials: true }
+        { withCredentials: !!process.env.REACT_APP_AUTHENTICATION_ENABLED }
       )
 
       // Push to sign in page
-      routerHistory.push('/auth/signIn')
+      if (process.env.REACT_APP_AUTHENTICATION_ENABLED) {
+        routerHistory.push('/auth/signIn')
+      } else {
+        routerHistory.push('/')
+      }
     } catch (err) {
       enqueueSnackbar(err.message ?? err, {
         variant: 'error'
@@ -73,7 +78,7 @@ const SignUp: React.FC = () => {
     <React.Fragment>
       <Box mb={2} pl={1}>
         <Typography variant="h4" color="textSecondary">
-          Sign Up
+          Sign Up New Broker
         </Typography>
       </Box>
       <Formik
@@ -134,4 +139,4 @@ const SignUp: React.FC = () => {
   )
 }
 
-export default SignUp
+export default SignUpBroker

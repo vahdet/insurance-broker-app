@@ -54,6 +54,8 @@ On the workstation the following should be installed:
 
      ```ps1
      $ C:\sqlite3.exe COALITION.db
+     SQLite version 3.31.1 2020-01-27 19:55:54
+     Enter ".help" for usage hints.
      $ sqlite>
      ```
 
@@ -61,12 +63,15 @@ On the workstation the following should be installed:
 
      ```sh
      $ sqlite3 COALITION.db
+     SQLite version 3.31.1 2020-01-27 19:55:54
+     Enter ".help" for usage hints.
      $ sqlite>
      ```
 
 4. Load the data from the [`data/agency_domain_whitelist.csv`](data/agency_domain_whitelist.csv) and [`data/agency.csv`](data/agency.csv) files. They are nothing but the headerless versions of the original csv files:
 
    ```sh
+   sqlite> PRAGMA foreign_keys = ON;
    sqlite> .mode csv
    sqlite> .import "data/agency_domain_whitelist.csv" agency_domain_whitelist
    sqlite> .import "data/agency.csv" agency
@@ -94,26 +99,31 @@ and then you can start using from your browser on default React endpoint: `http:
 
 - Terminal #1:
 
-    ```bat
-    $ cd .\api\auth
-    $ .\venv\Scripts\activate
-    $ (venv) python app.py
-    ```
+  ```bat
+  cd .\api\auth
+  py -3 -m venv venv
+  .\venv\Scripts\activate
+  (venv) pip install -r requirements.txt
+  (venv) python app.py
+  ```
 
 - Terminal #2:
 
-    ```bat
-    $ cd .\api\app
-    $ .\venv\Scripts\activate
-    $ (venv) python app.py
-    ```
+  ```bat
+  cd .\api\app
+  py -3 -m venv venv
+  .\venv\Scripts\activate
+  (venv) pip install -r requirements.txt
+  (venv) python app.py
+  ```
 
 - Terminal #3:
 
-    ```bat
-    $ cd .\ui
-    $ npm start
-    ```
+  ```bat
+  cd .\ui
+  npm install
+  npm start
+  ```
 
 ### Linux/macOS
 
@@ -121,100 +131,30 @@ Running the script `. run.sh` should launch three subshells and run all the apps
 
 - Terminal #1:
 
-    ```sh
-    $ cd api/auth
-    $ venv/bin/activate
-    $ (venv) python app.py
-    ```
+  ```sh
+  cd api/auth
+  python3 -m venv venv
+  source venv/bin/activate
+  (venv) pip install -r requirements.txt
+  (venv) python app.py
+  ```
 
 - Terminal #2:
 
-    ```sh
-    $ cd api/app
-    $ venv/Scripts/activate
-    $ (venv) python app.py
-    ```
+  ```sh
+  cd api/app
+  python3 -m venv venv
+  source venv/bin/activate
+  (venv) pip install -r requirements.txt
+  (venv) python app.py
+  ```
 
 - Terminal #3:
 
-    ```sh
-    $ cd ui
-    $ npm start
-    ```
-
-
-### Preparing the Environment and Installing the Dependencies
-
-- Create a virtual environment named _venv_ in the authentication project (backend) and install the dependencies:
-
-  - Windows:
-
-    ```ps1
-    cd api\auth
-    py -3 -m venv venv
-    venv\Scripts\activate
-    (venv) $ pip install -r requirements.txt
-    (venv) $ deactivate
-    cd ..\..
-    ```
-
-  - Linux/macOS:
-
-    ```sh
-    cd api/auth
-    python3 -m venv venv
-    source venv/bin/activate
-    (venv) $ pip install -r requirements.txt
-    (venv) $ deactivate
-    cd ../..
-    ```
-
-- Create a virtual environment named _venv_ in the application project (backend) and install the dependencies:
-
-  - Windows:
-
-    ```ps1
-    $ cd api\app
-    $ py -3 -m venv venv
-    $ venv\Scripts\activate
-    $ (venv) $ pip install -r requirements.txt
-    $ (venv) $ deactivate
-    $ cd ..\..
-    ```
-
-  - Linux/macOS:
-
-    ```sh
-    $ cd api/app
-    $ python3 -m venv venv
-    $ source venv/bin/activate
-    $ (venv) $ pip install -r requirements.txt
-    $ (venv) $ deactivate
-    $ cd ../..
-    ```
-
-- Install `node_modules` for the frontend:
-
   ```sh
-  $ cd ui
-  $ npm install
+  cd ui
+  npm install && npm start
   ```
-
-### Running the Apps
-
-Run
-
-- Windows (PowerShell)
-
-    ```ps1
-    . run.sh
-    ```
-
-- Linux
-
-    ```sh
-    . run.sh
-    ```
 
 ## Discussion
 
@@ -222,7 +162,7 @@ Run
 
 Both approaches has [pros and cons](https://dl.acm.org/doi/pdf/10.1145/3328433.3328435) and, technically, neither displays a solid outhmatch. Here, I preferred conveying all frontend and backend components in a single repository as it is a basic application. Yet, I kept `.gitignore` files in subdirectories in order to make possible future separations smoother.
 
-### Authentication Methodology
+### Authentication Methodology (Postponed)
 
 I had three options when planning my authentication flow:
 
