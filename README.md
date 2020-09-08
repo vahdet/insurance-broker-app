@@ -127,7 +127,15 @@ and then you can start using from your browser on default React endpoint: `http:
 
 ### Linux/macOS
 
-Running the script `. run.sh` should launch three subshells and run all the apps in parallel. However, in case there occurs problems with it; manual scripts can be run as follows:
+Running the `run.sh` script should launch three subshells and run all the apps in parallel:
+
+```sh
+. run.sh
+```
+
+> Even you use this script to run application resources, you still need to [Create Database Tables and Load Initial Data](#Create-Database-Tables-and-Load-Initial-Data) if you have not done up to this point.
+
+However, in case there occurs problems with it; manual scripts can be run as follows:
 
 - Terminal #1:
 
