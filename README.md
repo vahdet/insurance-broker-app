@@ -97,6 +97,16 @@ and then you can start using from your browser on default React endpoint: `http:
 
 ### Windows
 
+Running the `run.bat` file should launch three subshells and run all the apps launching them in new prompts:
+
+```ps1
+.\run.bat
+```
+
+> Even you use this script to run application resources, you still need to [Create Database Tables and Load Initial Data](#Create-Database-Tables-and-Load-Initial-Data) if you have not done up to this point.
+
+However, in case there occurs problems with it; manual scripts can be run as follows:
+
 - Terminal #1:
 
   ```bat
